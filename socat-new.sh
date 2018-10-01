@@ -84,14 +84,14 @@ startSocat(){
 
 runSocat(){
 	while [ ${Socatport} -le ${Socatportend} ]; do
-	nohup socat $1-LISTEN:${Socatport},reuseaddr,fork $1:${socatip}:${Socatport} >> ${socat_log_file} 2>&1 &
+	nohup socat $1-LISTEN:${Socatport},reuseaddr,fork $1:${socatip}:${Socatport} >> /tmp/socat.log 2>&1 &
 	${Socatport}=$[${Socatport}+1]
 	done
 }
 addLocal(){
 	while [ ${Socatport} -le ${Socatportend} ]; do
 	sed -i '/exit 0/d' /etc/rc.local
-	echo -e "nohup socat $1-LISTEN:${Socatport},reuseaddr,fork $1:${socatip}:${Socatport} >> ${socat_log_file} 2>&1 &" >> /etc/rc.local
+	echo -e "nohup socat $1-LISTEN:${Socatport},reuseaddr,fork $1:${socatip}:${Socatport} >> /tmp/socat.log 2>&1 &" >> /etc/rc.local
 	[[ ${release}  == "debian" ]] && echo -e "exit 0" >> /etc/rc.local
 	${Socatport}=$[${Socatport}+1]
 	done
