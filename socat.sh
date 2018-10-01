@@ -197,12 +197,18 @@ startSocat(){
 	Save_iptables
 }
 runSocat(){
-	nohup socat $1-LISTEN:${Socatport},reuseaddr,fork $1:${socatip}:${Socatport1} >> ${socat_log_file} 2>&1 &
+	while [ ${Socatport} -le ${Socatport1} ]; do
+	nohup socat $1-LISTEN:${Socatport},reuseaddr,fork $1:${socatip}:${Socatport} >> ${socat_log_file} 2>&1 &
+	${Socatport}=$[${Socatport}+1]
+	done
 }
 addLocal(){
+	while [ ${Socatport} -le ${Socatport1} ]; do
 	sed -i '/exit 0/d' /etc/rc.local
-	echo -e "nohup socat $1-LISTEN:${Socatport},reuseaddr,fork $1:${socatip}:${Socatport1} >> ${socat_log_file} 2>&1 &" >> /etc/rc.local
+	echo -e "nohup socat $1-LISTEN:${Socatport},reuseaddr,fork $1:${socatip}:${Socatport} >> ${socat_log_file} 2>&1 &" >> /etc/rc.local
 	[[ ${release}  == "debian" ]] && echo -e "exit 0" >> /etc/rc.local
+	${Socatport}=$[${Socatport}+1]
+	done
 }
 # 查看Socat列表
 listSocat(){
