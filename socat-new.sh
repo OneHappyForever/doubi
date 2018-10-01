@@ -2,7 +2,7 @@
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
 
-	
+installSocat() {
 yum update -y
 yum install socat wget iptables-services -y
 systemctl disable firewalld
@@ -40,7 +40,7 @@ startSocat
 ip=`wget -qO- -t1 -T2 ipinfo.io/ip`
 [[ -z $ip ]] && ip="ip"
 
-
+}
 startSocat(){
 	if [[ ${socattype} = "TCP" ]]; then
 		runSocat "TCP4"
@@ -92,3 +92,5 @@ addLocal(){
 Save_iptables(){
 	service iptables save
 }
+
+installSocat
