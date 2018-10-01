@@ -2,6 +2,13 @@
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
 
+sh_ver="1.0.5"
+socat_file="/usr/bin/socat"
+socat_log_file="/tmp/socat.log"
+
+check_socat(){
+	[[ ! -e ${socat_file} ]] && echo -e "${Error} 没有安装Socat，请检查 !" && exit 1
+}
 installSocat() {
 yum update -y
 yum install socat wget iptables-services -y
